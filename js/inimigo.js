@@ -40,19 +40,19 @@ export default class Inimigo {
     }
 
     anda(v){
-        if(v.x < this.x){
-            if(v.y > this.y){
+        if(v.x < this.sprite.getCenter().x){
+            if(v.y > this.sprite.getCenter().y){
                 this.sprite.setVelocityX(-this.velocidade);
                 this.sprite.setVelocityY(+this.velocidade);
-            }else if(v.y < this.y){
+            }else if(v.y < this.sprite.getCenter().y){
                 this.sprite.setVelocityX(-this.velocidade);
                 this.sprite.setVelocityY(-this.velocidade);
             }
-        }else if(v.x > this.x){
-            if(v.y > this.y){
+        }else if(v.x > this.sprite.getCenter().x){
+            if(v.y > this.sprite.getCenter().y){
                 this.sprite.setVelocityX(+this.velocidade);
                 this.sprite.setVelocityY(+this.velocidade);
-            }else if(v.y < this.y){
+            }else if(v.y < this.sprite.getCenter().y){
                 this.sprite.setVelocityX(+this.velocidade);
                 this.sprite.setVelocityY(-this.velocidade);
             }

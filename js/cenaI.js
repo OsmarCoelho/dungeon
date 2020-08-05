@@ -15,6 +15,7 @@ export default class cenaI extends Phaser.Scene {
 
     create() {
         let i = 0;
+        let c = 0;
         let auy = 0;
         let aux = 0;
         let tamX = 10;
@@ -65,14 +66,29 @@ export default class cenaI extends Phaser.Scene {
 
         //for para a parede da direita
         for(i = 0; i < tamY; i++){
+            let a = 0;
             //corredor
             if(i == 3){
                 plataformas.create(aux, (auy-(32*i)), 'ch0').setOrigin(0, 0).refreshBody().setSize(8, 4, false).setOffset(24, 0);
                 plataformas.create(aux, (auy-(32*i)), 'ch0').setOrigin(0, 0).refreshBody().setSize(8, 4, false).setOffset(24, 26);
-                for(let c = 0; c <= 5; c++){
+                for(c = 0; c <= 5; c++){
                     plataformas.create((aux+32) + (32*c), (auy-(32*i)), 'ch1').setOrigin(0, 0).refreshBody().setSize(32, 6, false).setOffset(0, 26);
                     plataformas.create((aux+32) + (32*c), (auy-(32*i)), 'ch1').setOrigin(0, 0).refreshBody().setSize(32, 4, false).setOffset(0, 0);
                 }
+                plataformas.create((aux+32) + (32*c), (auy-(32*c))+64, 'bse').setOrigin(0, 0).refreshBody().setSize(32, 11, false);
+                plataformas.create((aux+32) + (32*c), (auy-(32*c))+64, 'bse').setOrigin(0, 0).refreshBody().setSize(8, 32, false);
+                plataformas.create((aux+32) + (32*c), (auy-(32*i)), 'ch2').setOrigin(0, 0).refreshBody().setSize(8, 4, false).setOffset(0, 0);
+                plataformas.create((aux+32) + (32*c), (auy-(32*i)), 'ch2').setOrigin(0, 0).refreshBody().setSize(8, 6, false).setOffset(0, 26);
+                for(a = 0; a < 3; a++){
+                    plataformas.create((aux+32) + (32*c), (116+(32*a)), 'pm').setOrigin(0, 0).refreshBody().setSize(8, 32, false);
+                }
+                plataformas.create((aux+32) + (32*c), (116+(32*a)), 'bie').setOrigin(0, 0).refreshBody().setSize(8, 32, false);    
+                plataformas.create((aux+32) + (32*c), (116+(32*a)), 'bie').setOrigin(0, 0).refreshBody().setSize(32, 11, false).setOffset(0, 21);
+                for(a = 0; a < 8; a++){
+                    plataformas.create((aux+256) + (32*a), (116+(32*3)), 'mi').setOrigin(0, 0).refreshBody().setSize(32, 11, false).setOffset(0, 21);
+                }
+                plataformas.create((aux+256) + (32*a), auy+32, 'bid').setOrigin(0, 0).refreshBody().setSize(32, 11, false).setOffset(0, 21);
+                plataformas.create((aux+256) + (32*a), auy+32, 'bid').setOrigin(0, 0).refreshBody().setSize(8, 32, false).setOffset(24, 0);
             }else{
                 plataformas.create(aux, (auy-(32*i)), 'pmd').setOrigin(0, 0).refreshBody().setSize(8, 32, false).setOffset(24, 0);
             }
@@ -136,7 +152,7 @@ export default class cenaI extends Phaser.Scene {
             left:Phaser.Input.Keyboard.KeyCodes.A,
             right:Phaser.Input.Keyboard.KeyCodes.D
         }); 
-        this.cameras.main.setBounds(0, 0, 1000, 360);
+        this.cameras.main.setBounds(0, 0, 1500, 360);
         this.cameras.main.startFollow(jogador, true, 0.08, 0.08);
 
         
@@ -154,19 +170,21 @@ export default class cenaI extends Phaser.Scene {
         }
         //fim assets
 
+        //controle de camera
         if(this.teclas.left.isDown && this.Jogador.x > 0){
-            this.Jogador.x -= 2.5;
-            bx+=2.5;
-        }else if(this.teclas.right.isDown && this.Jogador.x < 1000){
-            this.Jogador.x += 2.5;
-            bx+=2.5;
+            this.Jogador.x -= 1.5;
+            bx+=1.5;
+        }else if(this.teclas.right.isDown && this.Jogador.x < 1500){
+            this.Jogador.x += 1.5;
+            bx+=1.5;
         }if(this.teclas.up.isDown && this.Jogador.y > 0){
-            this.Jogador.y -= 2.5;
-            by+=2.5;
+            this.Jogador.y -= 1.5;
+            by+=1.5;
         }else if (this.teclas.down.isDown && this.Jogador.y < 360){
-            this.Jogador.y += 2.5;
-            by+=2.5;
+            this.Jogador.y += 1.5;
+            by+=1.5;
         }
+        //fim controle de camera
         
         //movimentação do inimigo
         for(let i = 0; i < inimigos.length; i++){
