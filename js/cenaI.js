@@ -138,11 +138,15 @@ export default class cenaI extends Phaser.Scene {
         }); 
         this.cameras.main.setBounds(0, 0, 1000, 360);
         this.cameras.main.startFollow(jogador, true, 0.08, 0.08);
+
+        
     }
     update() {
         const jogador = this.Jogador.sprite;
         const inimigos = this.inimigos;
         const tochas = this.tochas;
+        let bx = 10;
+        let by = 340;
 
         //Assets
         for(let t = 0; t < 12; t++){
@@ -152,19 +156,33 @@ export default class cenaI extends Phaser.Scene {
 
         if(this.teclas.left.isDown && this.Jogador.x > 0){
             this.Jogador.x -= 2.5;
+            bx+=2.5;
         }else if(this.teclas.right.isDown && this.Jogador.x < 1000){
             this.Jogador.x += 2.5;
+            bx+=2.5;
         }if(this.teclas.up.isDown && this.Jogador.y > 0){
             this.Jogador.y -= 2.5;
+            by+=2.5;
         }else if (this.teclas.down.isDown && this.Jogador.y < 360){
             this.Jogador.y += 2.5;
+            by+=2.5;
         }
         
         //movimentação do inimigo
         for(let i = 0; i < inimigos.length; i++){
-            if(inimigos[i].ver(jogador.x, jogador.y) <= 100){
-                inimigos[i].sprite.anims.play('movendo', true);   
-            }else if(inimigos[i].ver(jogador.x, jogador.y) > 100){
+            if(inimigos[i].ver(jogador.getCenter()) <= 75){
+                if(inimigos[i].ver(jogador.getCenter()) <= 15){
+                    this.atualizaVida();
+                    inimigos[i].sprite.destroy(true);
+                    inimigos.pop(inimigos[i]);
+                    
+                }else{
+                    inimigos[i].sprite.anims.play('movendo', true); 
+                    inimigos[i].anda(jogador.getCenter()); 
+                }           
+            }else if(inimigos[i].ver(jogador.getCenter()) > 75){
+                inimigos[i].sprite.setVelocityX(0);
+                inimigos[i].sprite.setVelocityY(0);    
                 inimigos[i].sprite.anims.play('parado', true);
             }
         }
@@ -174,19 +192,19 @@ export default class cenaI extends Phaser.Scene {
         
         //movimentação do personagem
         if (this.teclas.left.isDown) {
-            jogador.setVelocityX(-160);
+            jogador.setVelocityX(-100);
             jogador.setFlip(true, false)
             jogador.anims.play('esquerda', true);
         }else if (this.teclas.right.isDown) {
-            jogador.setVelocityX(160);
+            jogador.setVelocityX(100);
             jogador.setFlip(false, false)
             jogador.anims.play('direita', true);
         } else if(this.teclas.up.isDown){
-            jogador.setVelocityY(-160);
+            jogador.setVelocityY(-100);
             jogador.setFlip(false, false)
             jogador.anims.play('cima', true);
         }else if(this.teclas.down.isDown){
-            jogador.setVelocityY(160);
+            jogador.setVelocityY(100);
             jogador.setFlip(false, false)
             jogador.anims.play('baixo', true);
         }else {
@@ -197,4 +215,22 @@ export default class cenaI extends Phaser.Scene {
         //fim movimentação do personagem
         
     }
+    atualizaVida(){
+        this.Jogador.vida = this.Jogador.vida - 10;
+        console.log(this.Jogador.vida);
+            if(this.Jogador.vida <= 0){
+                this.barraDeVida.clear()
+                this.barraDeVida.fillStyle(0xff0000, 1);
+                this.barraDeVida.fillRect(10, 340, 0, 10);
+                this.barraDeVida.lineStyle(4, 0xffffff, 1);
+                this.barraDeVida.strokeRect(10, 340, 100, 10);
+                location.reload();
+            }else{
+                this.barraDeVida.clear()
+                this.barraDeVida.fillStyle(0xff0000, 1);
+                this.barraDeVida.fillRect(10, 340, this.Jogador.vida, 10);
+                this.barraDeVida.lineStyle(4, 0xffffff, 1);
+                this.barraDeVida.strokeRect(10, 340, 100, 10);
+            }
+        }
 }

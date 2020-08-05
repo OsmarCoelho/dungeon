@@ -3,7 +3,7 @@ export default class Inimigo {
         this.x = x;
         this.y = y;
         this.h = 14;
-        this.velocidade = 20;
+        this.velocidade = 15;
         this.cena = cena;
         this.sprite = cena.physics.add.sprite(this.x, this.y, 'slimeInimigo');
         this.sprite.body.setSize(14, 14).setOffset(10, 19);
@@ -26,35 +26,33 @@ export default class Inimigo {
         });
     }
 
-    ver(xp, yp){
-        let a = Math.abs(this.x - xp);
-        let b = Math.abs(this.y - yp);
+    ver(v){
+        let a = Math.abs(this.sprite.getCenter().x - v.x);
+        let b = Math.abs(this.sprite.getCenter().y - v.y);
         let d = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 
-        if(d <= 100){
-            this.anda(xp, yp);
+        
+        if(d <= 75){
             return d;
-        } else if(d > 100){
-            this.sprite.setVelocityX(0);
-            this.sprite.setVelocityY(0);
+        } else if(d > 75){
             return d;
         }	
     }
 
-    anda(xp, yp){
-        if(xp < this.x){
-            if(yp > this.y){
+    anda(v){
+        if(v.x < this.x){
+            if(v.y > this.y){
                 this.sprite.setVelocityX(-this.velocidade);
                 this.sprite.setVelocityY(+this.velocidade);
-            }else if(yp < this.y){
+            }else if(v.y < this.y){
                 this.sprite.setVelocityX(-this.velocidade);
                 this.sprite.setVelocityY(-this.velocidade);
             }
-        }else if(xp > this.x){
-            if(yp > this.y){
+        }else if(v.x > this.x){
+            if(v.y > this.y){
                 this.sprite.setVelocityX(+this.velocidade);
                 this.sprite.setVelocityY(+this.velocidade);
-            }else if(yp < this.y){
+            }else if(v.y < this.y){
                 this.sprite.setVelocityX(+this.velocidade);
                 this.sprite.setVelocityY(-this.velocidade);
             }

@@ -47,17 +47,4 @@ export default class Jogador {
             repeat: -1
         });
     }
-
-    atualizaVida(vida, barra){
-        console.log(vida);
-        vida = vida - 5;
-        if(vida <= 0){
-            alert("Você morreu...");
-        }else{
-            barra.fillStyle(0xff0000, 1);
-            barra.fillRect(10, 340, vida, 10);
-            barra.lineStyle(4, 0xffffff, 1);
-            barra.strokeRect(10, 340, 100, 10);
-        }
-    }
 }
