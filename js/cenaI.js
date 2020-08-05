@@ -65,12 +65,13 @@ export default class cenaI extends Phaser.Scene {
 
         //for para a parede da direita
         for(i = 0; i < tamY; i++){
+            //corredor
             if(i == 3){
                 plataformas.create(aux, (auy-(32*i)), 'ch0').setOrigin(0, 0).refreshBody().setSize(8, 4, false).setOffset(24, 0);
                 plataformas.create(aux, (auy-(32*i)), 'ch0').setOrigin(0, 0).refreshBody().setSize(8, 4, false).setOffset(24, 26);
                 for(let c = 0; c <= 5; c++){
-                    plataformas.create((aux+32) + (32*c), (auy-(32*i)), 'ch1').setOrigin(0, 0).refreshBody().setSize(32, 7, false).setOffset(0, 26);
-                    plataformas.create((aux+32) + (32*c), (auy-(32*i)), 'ch1').setOrigin(0, 0).refreshBody().setSize(32, 6, false).setOffset(0, 0);
+                    plataformas.create((aux+32) + (32*c), (auy-(32*i)), 'ch1').setOrigin(0, 0).refreshBody().setSize(32, 6, false).setOffset(0, 26);
+                    plataformas.create((aux+32) + (32*c), (auy-(32*i)), 'ch1').setOrigin(0, 0).refreshBody().setSize(32, 4, false).setOffset(0, 0);
                 }
             }else{
                 plataformas.create(aux, (auy-(32*i)), 'pmd').setOrigin(0, 0).refreshBody().setSize(8, 32, false).setOffset(24, 0);
@@ -89,13 +90,31 @@ export default class cenaI extends Phaser.Scene {
         let jogador = new Jogador(this);
         this.Jogador = jogador;
         this.physics.add.collider(jogador.sprite, plataformas);
+
+        this.barraDeVida = this.add.graphics();
+        this.barraDeVida.fillStyle(0xff0000, 1);
+        this.barraDeVida.fillRect(10, 340, jogador.vida, 10);
+        this.barraDeVida.lineStyle(4, 0xffffff, 1);
+        this.barraDeVida.strokeRect(10, 340, 100, 10);
         //fim Jogador
 
         //inimigos
-        let inimigo = new Inimigo(this, 300, 200);
-        this.Inimigo = inimigo;
+        let inimigos = [];
+        for(let i = 0; i < 5; i ++){
+            let inimigo = new Inimigo(this, (300 - (32*i)), (200 - (5*i)));
+            inimigos.push(inimigo);
+            
+            this.physics.add.collider(inimigos[i].sprite, plataformas);
+            this.physics.add.collider(inimigos[i].sprite, jogador.sprite);
+        }
+        for(let i = 0; i < 5; i ++){
+            for(let g = 0; g < 5; g ++){
+                this.physics.add.collider(inimigos[i].sprite, inimigos[g].sprite);
+            }
+        }
 
-        this.physics.add.collider(inimigo.sprite, plataformas);
+
+        this.inimigos = inimigos;
         //fim inimigos
         
        
@@ -111,12 +130,18 @@ export default class cenaI extends Phaser.Scene {
         this.tochas = tochas;
         // Fim tochas
 
-        this.teclas = this.input.keyboard.createCursorKeys();      
+        this.teclas = this.input.keyboard.addKeys({
+            up:Phaser.Input.Keyboard.KeyCodes.W,
+            down:Phaser.Input.Keyboard.KeyCodes.S,
+            left:Phaser.Input.Keyboard.KeyCodes.A,
+            right:Phaser.Input.Keyboard.KeyCodes.D
+        }); 
+        this.cameras.main.setBounds(0, 0, 1000, 360);
+        this.cameras.main.startFollow(jogador, true, 0.08, 0.08);
     }
-
     update() {
         const jogador = this.Jogador.sprite;
-        const inimigo = this.Inimigo;
+        const inimigos = this.inimigos;
         const tochas = this.tochas;
 
         //Assets
@@ -125,15 +150,26 @@ export default class cenaI extends Phaser.Scene {
         }
         //fim assets
 
+        if(this.teclas.left.isDown && this.Jogador.x > 0){
+            this.Jogador.x -= 2.5;
+        }else if(this.teclas.right.isDown && this.Jogador.x < 1000){
+            this.Jogador.x += 2.5;
+        }if(this.teclas.up.isDown && this.Jogador.y > 0){
+            this.Jogador.y -= 2.5;
+        }else if (this.teclas.down.isDown && this.Jogador.y < 360){
+            this.Jogador.y += 2.5;
+        }
         
         //movimentação do inimigo
-        if(inimigo.ver(jogador.x, jogador.y) == true){
-			inimigo.sprite.anims.play('movendo', true);
-            inimigo.anda(jogador.x, jogador.y);
-		} else{
-			inimigo.sprite.anims.play('parado', true);
+        for(let i = 0; i < inimigos.length; i++){
+            if(inimigos[i].ver(jogador.x, jogador.y) <= 100){
+                inimigos[i].sprite.anims.play('movendo', true);   
+            }else if(inimigos[i].ver(jogador.x, jogador.y) > 100){
+                inimigos[i].sprite.anims.play('parado', true);
+            }
         }
         //fim movimentação do inimigo
+
         
         
         //movimentação do personagem

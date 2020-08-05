@@ -1,8 +1,9 @@
 export default class Inimigo {
     constructor(cena, x, y) {
         this.x = x;
-        this.y = y
+        this.y = y;
         this.h = 14;
+        this.velocidade = 20;
         this.cena = cena;
         this.sprite = cena.physics.add.sprite(this.x, this.y, 'slimeInimigo');
         this.sprite.body.setSize(14, 14).setOffset(10, 19);
@@ -31,33 +32,32 @@ export default class Inimigo {
         let d = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 
         if(d <= 100){
-            return true;
-        } else{
-            return false;
+            this.anda(xp, yp);
+            return d;
+        } else if(d > 100){
+            this.sprite.setVelocityX(0);
+            this.sprite.setVelocityY(0);
+            return d;
         }	
     }
 
     anda(xp, yp){
         if(xp < this.x){
             if(yp > this.y){
-                this.x -= 0.5;
-                this.y += 0.5;
-            }else{
-                this.x -= 0.5;
-                this.y -= 0.5;
+                this.sprite.setVelocityX(-this.velocidade);
+                this.sprite.setVelocityY(+this.velocidade);
+            }else if(yp < this.y){
+                this.sprite.setVelocityX(-this.velocidade);
+                this.sprite.setVelocityY(-this.velocidade);
             }
-        }else{
+        }else if(xp > this.x){
             if(yp > this.y){
-                this.x += 0.5;
-                this.y += 0.5;
-            }else{
-                this.x += 0.5;
-                this.y -= 0.5;
+                this.sprite.setVelocityX(+this.velocidade);
+                this.sprite.setVelocityY(+this.velocidade);
+            }else if(yp < this.y){
+                this.sprite.setVelocityX(+this.velocidade);
+                this.sprite.setVelocityY(-this.velocidade);
             }
         }
-        
-        
-        this.sprite.setPosition(this.x, this.y);
-        return true;
     }
 }
