@@ -4,8 +4,8 @@ import cenaI from './cenaI.js';
 
 const config = {
     type: Phaser.AUTO,
-    width: 720,
-    height: 360,
+    width: 1080,
+    height: 480,
     parent: 'cena',
     physics: {
         default: 'arcade',
@@ -13,7 +13,7 @@ const config = {
             gravity: {
                 y: 0
             },
-            debug: true
+            debug: false
         }
     },
     scene: [

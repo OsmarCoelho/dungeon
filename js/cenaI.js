@@ -25,7 +25,7 @@ export default class cenaI extends Phaser.Scene {
         //Inicio cenario
         const background = this.add.graphics();
         background.fillStyle(0x000000, 1);
-        background.fillRect(0, 0, 720, 360);
+        background.fillRect(0, 0, 1080, 480);
 
 
         const plataformas = this.physics.add.staticGroup();
@@ -109,9 +109,11 @@ export default class cenaI extends Phaser.Scene {
 
         this.barraDeVida = this.add.graphics();
         this.barraDeVida.fillStyle(0xff0000, 1);
-        this.barraDeVida.fillRect(10, 340, jogador.vida, 10);
+        this.barraDeVida.fillRect(212, 350, jogador.vida, 10);
         this.barraDeVida.lineStyle(4, 0xffffff, 1);
-        this.barraDeVida.strokeRect(10, 340, 100, 10);
+        this.barraDeVida.strokeRect(212, 350, 100, 10);
+        this.barraDeVida.setScrollFactor(0);
+        
         //fim Jogador
 
         //inimigos
@@ -152,8 +154,9 @@ export default class cenaI extends Phaser.Scene {
             left:Phaser.Input.Keyboard.KeyCodes.A,
             right:Phaser.Input.Keyboard.KeyCodes.D
         }); 
-        this.cameras.main.setBounds(0, 0, 1500, 360);
-        this.cameras.main.startFollow(jogador, true, 0.08, 0.08);
+        this.cameras.main.setBounds(0, 0, 950, 480);
+        this.cameras.main.startFollow(jogador, false, 1, 1);
+        this.cameras.main.setZoom(1.5);
 
         
     }
@@ -161,8 +164,6 @@ export default class cenaI extends Phaser.Scene {
         const jogador = this.Jogador.sprite;
         const inimigos = this.inimigos;
         const tochas = this.tochas;
-        let bx = 10;
-        let by = 340;
 
         //Assets
         for(let t = 0; t < 12; t++){
@@ -172,17 +173,13 @@ export default class cenaI extends Phaser.Scene {
 
         //controle de camera
         if(this.teclas.left.isDown && this.Jogador.x > 0){
-            this.Jogador.x -= 1.5;
-            bx+=1.5;
-        }else if(this.teclas.right.isDown && this.Jogador.x < 1500){
-            this.Jogador.x += 1.5;
-            bx+=1.5;
+            this.Jogador.x -= 2;
+        }else if(this.teclas.right.isDown && this.Jogador.x < 950){
+            this.Jogador.x += 2;
         }if(this.teclas.up.isDown && this.Jogador.y > 0){
-            this.Jogador.y -= 1.5;
-            by+=1.5;
-        }else if (this.teclas.down.isDown && this.Jogador.y < 360){
-            this.Jogador.y += 1.5;
-            by+=1.5;
+            this.Jogador.y -= 2;
+        }else if (this.teclas.down.isDown && this.Jogador.y < 480){
+            this.Jogador.y += 2;
         }
         //fim controle de camera
         
@@ -192,8 +189,7 @@ export default class cenaI extends Phaser.Scene {
                 if(inimigos[i].ver(jogador.getCenter()) <= 15){
                     this.atualizaVida();
                     inimigos[i].sprite.destroy(true);
-                    inimigos.pop(inimigos[i]);
-                    
+                    inimigos.pop(inimigos[i]);    
                 }else{
                     inimigos[i].sprite.anims.play('movendo', true); 
                     inimigos[i].anda(jogador.getCenter()); 
@@ -239,16 +235,16 @@ export default class cenaI extends Phaser.Scene {
             if(this.Jogador.vida <= 0){
                 this.barraDeVida.clear()
                 this.barraDeVida.fillStyle(0xff0000, 1);
-                this.barraDeVida.fillRect(10, 340, 0, 10);
+                this.barraDeVida.fillRect(212, 350, 0, 10);
                 this.barraDeVida.lineStyle(4, 0xffffff, 1);
-                this.barraDeVida.strokeRect(10, 340, 100, 10);
+                this.barraDeVida.strokeRect(212, 350, 100, 10);
                 location.reload();
             }else{
                 this.barraDeVida.clear()
                 this.barraDeVida.fillStyle(0xff0000, 1);
-                this.barraDeVida.fillRect(10, 340, this.Jogador.vida, 10);
+                this.barraDeVida.fillRect(212, 350, this.Jogador.vida, 10);
                 this.barraDeVida.lineStyle(4, 0xffffff, 1);
-                this.barraDeVida.strokeRect(10, 340, 100, 10);
+                this.barraDeVida.strokeRect(212, 350, 100, 10);
             }
         }
 }
