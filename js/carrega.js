@@ -51,7 +51,13 @@ export default class carrega extends Phaser.Scene {
         this.load.spritesheet('tochas', 'imgs/tochas.png', { frameWidth: 16, frameHeight: 16 });
 
         //personagens
-        this.load.spritesheet('slime', 'imgs/slime-vermelha.png', { frameWidth: 24, frameHeight: 24 });
+        this.load.spritesheet('idle', 'imgs/idleToast.png', { frameWidth: 16, frameHeight: 16 });
+        this.load.spritesheet('move', 'imgs/movingToast.png', {frameWidth: 16, frameHeight: 16 });
+        this.load.spritesheet('up', 'imgs/upToast.png', {frameWidth: 16, frameHeight: 16 });
+        this.load.spritesheet('shoot', 'imgs/shootToast.png', {frameWidth: 16, frameHeight: 16 });
+
+        this.load.image('pao', 'imgs/pão.png');
+
         this.load.spritesheet('slimeInimigo', 'imgs/slime-spritesheet.png', { frameWidth: 32, frameHeight: 32 });
         
 

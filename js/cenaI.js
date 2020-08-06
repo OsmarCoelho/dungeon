@@ -1,6 +1,8 @@
 import Jogador from "./jogador.js";
 import Inimigo from "./inimigo.js";
 import Tocha from "./tocha.js";
+import Pao from "./pao.js";
+
 
 export default class cenaI extends Phaser.Scene {
     constructor() {
@@ -20,6 +22,7 @@ export default class cenaI extends Phaser.Scene {
         let aux = 0;
         let tamX = 10;
         let tamY = 5;
+        this.tiros = [];
         
 
         //Inicio cenario
@@ -195,7 +198,7 @@ export default class cenaI extends Phaser.Scene {
         this.inimigos = inimigos;
         //fim inimigos
         
-       
+        this.plataformas = plataformas;
 
         //Tochas
         let tochas = [];
@@ -217,7 +220,8 @@ export default class cenaI extends Phaser.Scene {
             up:Phaser.Input.Keyboard.KeyCodes.W,
             down:Phaser.Input.Keyboard.KeyCodes.S,
             left:Phaser.Input.Keyboard.KeyCodes.A,
-            right:Phaser.Input.Keyboard.KeyCodes.D
+            right:Phaser.Input.Keyboard.KeyCodes.D,
+            shoot:Phaser.Input.Keyboard.KeyCodes.T,
         }); 
         this.cameras.main.setBounds(0, 0, 950, 480);
         this.cameras.main.startFollow(jogador, false, 1, 1);
@@ -229,6 +233,7 @@ export default class cenaI extends Phaser.Scene {
         const jogador = this.Jogador.sprite;
         const inimigos = this.inimigos;
         const tochas = this.tochas;
+        this.estado = 1;
 
         //Assets
         for(let t = 0; t < tochas.length; t++){
@@ -265,12 +270,24 @@ export default class cenaI extends Phaser.Scene {
                 inimigos[i].sprite.anims.play('parado', true);
             }
         }
+
+        if(this.tiros.length != 0){
+            for(let i = 0; i < inimigos.length; i++){
+                for(let c = 0; c < this.tiros.length; c++){
+                    if(inimigos[i].ver(this.tiros[c].sprite.getCenter()) <= 16){ 
+                        this.tiros[c].sprite.destroy(true);
+                        this.tiros.pop(this.tiros[c]); 
+                    }
+                }
+            }
+        }
+        
         //fim movimentação do inimigo
 
         
         
         //movimentação do personagem
-        if (this.teclas.left.isDown) {
+        if(this.teclas.left.isDown) {
             jogador.setVelocityX(-100);
             jogador.setFlip(true, false)
             jogador.anims.play('esquerda', true);
@@ -286,12 +303,30 @@ export default class cenaI extends Phaser.Scene {
             jogador.setVelocityY(100);
             jogador.setFlip(false, false)
             jogador.anims.play('baixo', true);
+        }else if(this.teclas.shoot.isDown){
+            jogador.anims.play('atira', true);
+            this.estado = 0;
+            this.atualizaTiro(); 
         }else {
             jogador.setVelocityX(0);
             jogador.setVelocityY(0);
-            jogador.anims.play('idle');
+            jogador.anims.play('idle', true);
         }
+
+        
         //fim movimentação do personagem
+        
+    }
+    atualizaTiro(){
+        this.Jogador.tiro = new Pao(this, this.Jogador.sprite.getCenter().x, this.Jogador.sprite.getCenter().y);
+        this.tiros.push(this.Jogador.tiro);
+        for(let i = 0; i < this.inimigos.length; i ++){
+            this.physics.add.collider(this.inimigos[i].sprite, this.Jogador.tiro.sprite);
+        }
+        this.physics.add.collider(this.Jogador.sprite, this.Jogador.tiro.sprite);
+        this.physics.add.collider(this.plataformas, this.Jogador.tiro.sprite);
+
+
         
     }
     atualizaVida(){
