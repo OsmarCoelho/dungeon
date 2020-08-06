@@ -42,15 +42,10 @@ export default class carrega extends Phaser.Scene {
         this.load.image('ch1', 'imgs/tiles/corredor/horizontal/01.png');
         this.load.image('ch2', 'imgs/tiles/corredor/horizontal/02.png');
 
-        //vertical cima
-        //this.load.image('cvc0', 'imgs/tiles/corredor/vertical/cima/00.png');
-        this.load.image('cvc1', 'imgs/tiles/corredor/vertical/cima/01.png');
-        this.load.image('cvc3', 'imgs/tiles/corredor/vertical/cima/02.png');
-
         //vertical baixo
-        this.load.image('cbc0', 'imgs/tiles/corredor/vertical/baixo/00.png');
-        this.load.image('cbc1', 'imgs/tiles/corredor/vertical/baixo/01.png');
-        this.load.image('cbc3', 'imgs/tiles/corredor/vertical/baixo/02.png');
+        this.load.image('cvb0', 'imgs/tiles/corredor/vertical/baixo/00.png');
+        this.load.image('cvb1', 'imgs/tiles/corredor/vertical/baixo/01.png');
+        this.load.image('cvb2', 'imgs/tiles/corredor/vertical/baixo/02.png');
 
         //assets
         this.load.spritesheet('tochas', 'imgs/tochas.png', { frameWidth: 16, frameHeight: 16 });
