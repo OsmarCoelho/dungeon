@@ -7,6 +7,7 @@ export default class Jogador {
         this.x = 64;
         this.y = 64;
         this.h = 16; 
+        this.velocidadedopao = 50;
         this.tiro = null;
         this.sprite = cena.physics.add.sprite(64, 64, 'idle');
         this.sprite.body.setSize(16, 16);
@@ -58,24 +59,28 @@ export default class Jogador {
         });
     }
 
-    atirar(e){
-        console.log(e.x, e.y);
-        if(e.x < this.sprite.getCenter().x){
-            if(e.y > this.sprite.getCenter().y){
-                this.tiro.x = (-30);
-                this.tiro.y = (+30);
-            }else if(e.y < this.sprite.getCenter().y){
-                this.tiro.x = (-30);
-                this.tiro.y= (-30);
+    atirar(px, py){
+        if(this.tiro != null){
+            console.log(px, py);
+            if(this.sprite.getCenter().x > px){
+                if(this.sprite.getCenter().y < py){
+                    this.tiro.sprite.setVelocityX(-this.velocidadedopao);
+                    this.tiro.sprite.setVelocityY(+this.velocidadedopao);
+                }else if(this.sprite.getCenter().y > py){
+                    this.tiro.sprite.setVelocityX(-this.velocidadedopao);
+                    this.tiro.sprite.setVelocityY(-this.velocidadedopao);
+                }
+            }else if(this.sprite.getCenter().x < px){
+                if(this.sprite.getCenter().y > py){
+                    this.tiro.sprite.setVelocityX(+this.velocidadedopao);
+                    this.tiro.sprite.setVelocityY(+this.velocidadedopao);
+                }else if(this.sprite.getCenter().y < py){
+                    this.tiro.sprite.setVelocityX(+this.velocidadedopao);
+                    this.tiro.sprite.setVelocityY(-this.velocidadedopao);
+                }
             }
-        }else if(e.x > this.sprite.getCenter().x){
-            if(e.y > this.sprite.getCenter().y){
-                this.tiro.x = (+30);
-                this.tiro.y = (+30);
-            }else if(e.y < this.sprite.getCenter().y){
-                this.tiro.x = (+30);
-                this.tiro.y = (-30);
-            }
-        }
+        }else{
+            this.tiro = new Pao(this.cena, this.sprite.getCenter().x, this.sprite.getCenter().y);
+        }      
     }
 }

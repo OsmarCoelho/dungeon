@@ -1,4 +1,4 @@
-export default class Pao {
+export default class Pao{
     constructor(cena, x, y) {
         this.cena = cena;
         this.x = x;
