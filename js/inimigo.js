@@ -32,10 +32,7 @@ export default class Inimigo {
         let b = Math.abs(this.sprite.getCenter().y - v.y);
         let d = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 
-        if(d <= 15){
-            this.vida = 0;
-            this.morreu();
-        }else if(d <= 75 && d > 15 && this.vida != 0){
+        if(d <= 75 && d > 15 && this.vida != 0){
             this.sprite.anims.play('movendo', true);
             this.anda(v);
         } else if(d > 75 && this.vida != 0){
@@ -46,10 +43,15 @@ export default class Inimigo {
         return d;
     }
 
-    atualizaVida(){
+    atualizaVida(inimigos, inimigo){
         this.vida -= 10;
         if(this.vida == 0){
-            this.morreu();
+            let index = inimigos.indexOf(inimigo);
+            inimigos.slice(index, 1);
+            inimigo.sprite.setVisible(false);
+            inimigo.sprite.setPosition(0, 0);
+            inimigo.sprite.disableBody(true, true);
+            inimigo.sprite.destroy(true);
         }
     }
 
@@ -71,9 +73,5 @@ export default class Inimigo {
                 this.sprite.setVelocityY(-this.velocidade);
             }
         }
-    }
-
-    morreu(){
-        this.sprite.destroy(true);
     }
 }

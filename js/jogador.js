@@ -7,8 +7,9 @@ export default class Jogador {
         this.x = 64;
         this.y = 64;
         this.h = 16; 
-        this.velocidadedopao = 50;
-        this.tiro = null;
+        this.velocidadedopao = 100;
+        this.podeAtirar = true;
+        this.tiro = [];
         this.sprite = cena.physics.add.sprite(64, 64, 'idle');
         this.sprite.body.setSize(16, 16);
         this.sprite.setBounce(0.2);
@@ -60,27 +61,34 @@ export default class Jogador {
     }
 
     atirar(px, py){
-        if(this.tiro != null){
-            console.log(px, py);
-            if(this.sprite.getCenter().x > px){
-                if(this.sprite.getCenter().y < py){
-                    this.tiro.sprite.setVelocityX(-this.velocidadedopao);
-                    this.tiro.sprite.setVelocityY(+this.velocidadedopao);
-                }else if(this.sprite.getCenter().y > py){
-                    this.tiro.sprite.setVelocityX(-this.velocidadedopao);
-                    this.tiro.sprite.setVelocityY(-this.velocidadedopao);
-                }
-            }else if(this.sprite.getCenter().x < px){
-                if(this.sprite.getCenter().y > py){
-                    this.tiro.sprite.setVelocityX(+this.velocidadedopao);
-                    this.tiro.sprite.setVelocityY(+this.velocidadedopao);
-                }else if(this.sprite.getCenter().y < py){
-                    this.tiro.sprite.setVelocityX(+this.velocidadedopao);
-                    this.tiro.sprite.setVelocityY(-this.velocidadedopao);
-                }
+        let tiroAtual = new Pao(this.cena, this.sprite.getCenter().x, this.sprite.getCenter().y);
+        this.tiro.push(tiroAtual);
+        this.podeAtirar = false;
+        if(px < this.x){
+            if(py < this.y){
+                tiroAtual.sprite.setVelocityX(-this.velocidadedopao);
+                tiroAtual.sprite.setVelocityY(-this.velocidadedopao);    
+            }else if(py > this.y){
+                tiroAtual.sprite.setVelocityX(-this.velocidadedopao);
+                tiroAtual.sprite.setVelocityY(+this.velocidadedopao);
             }
-        }else{
-            this.tiro = new Pao(this.cena, this.sprite.getCenter().x, this.sprite.getCenter().y);
-        }      
+        }else if(px > this.x){
+            if(py < this.y){
+                tiroAtual.sprite.setVelocityX(+this.velocidadedopao);
+                tiroAtual.sprite.setVelocityY(-this.velocidadedopao);    
+            }else if(py > this.y){
+                tiroAtual.sprite.setVelocityX(+this.velocidadedopao);
+                tiroAtual.sprite.setVelocityY(+this.velocidadedopao);
+            }
+        }
+        setTimeout(() => {
+            this.podeAtirar = true;
+        }, 500);
+    }
+
+    destroi(tiroEl){
+        let index = this.tiro.indexOf(tiroEl);
+        this.tiro.slice(index, 1);
+        tiroEl.sprite.destroy(true);
     }
 }

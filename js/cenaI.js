@@ -43,13 +43,25 @@ export default class cenaI extends Phaser.Scene {
         inimigos.push(new Inimigo(this, 800, 400));
         inimigos.push(new Inimigo(this, 750, 300));
 
-        inimigos.push(new Inimigo(this, 800, 200));
-        inimigos.push(new Inimigo(this, 700, 70));
-        inimigos.push(new Inimigo(this, 650, 100));
+        inimigos.push(new Inimigo(this, 890, 165));
+        inimigos.push(new Inimigo(this, 800, 100));
+        inimigos.push(new Inimigo(this, 700, 300));
 
         inimigos.push(new Inimigo(this, 450, 90));
         inimigos.push(new Inimigo(this, 350, 150));
         inimigos.push(new Inimigo(this, 200, 50));
+
+        inimigos.push(new Inimigo(this, 658, 389));
+        inimigos.push(new Inimigo(this, 800, 250));
+
+        inimigos.push(new Inimigo(this, 850, 115));
+        inimigos.push(new Inimigo(this, 750, 150));
+        inimigos.push(new Inimigo(this, 600, 350));
+
+        inimigos.push(new Inimigo(this, 500, 90));
+        inimigos.push(new Inimigo(this, 300, 120));
+        inimigos.push(new Inimigo(this, 150, 100));
+
 
         for(let i = 0; i < inimigos.length; i ++){
             this.physics.add.collider(inimigos[i].sprite, this.plataformas);
@@ -122,8 +134,8 @@ export default class cenaI extends Phaser.Scene {
         //Movimentação e colisão do inimigo
         for(let i = 0; i < inimigos.length; i++){
             inimigos[i].ver(jogador.getCenter());
-            if(inimigos[i].ver(jogador.getCenter()) <= 16){
-                inimigos.pop(inimigos[i]);    
+            if(inimigos[i].ver(jogador.getCenter()) <= 15){
+                this.inimigos[i].atualizaVida(this.inimigos, this.inimigos[i]);    
                 this.atualizaVida();
             }     
         }
@@ -169,27 +181,25 @@ export default class cenaI extends Phaser.Scene {
     }
 
     atualizaTiro(){
-        console.log(this.pointerX, this.pointerY);
-    
-        this.Jogador.atirar(this.pointerX, this.pointerY);
-        
-        
-        for(let i = 0; i < this.inimigos.length; i ++){
-            let aux;
-            this.physics.add.collider(this.inimigos[i].sprite, this.Jogador.tiro.sprite, () => {
-                this.inimigos[i].atualizaVida();
-                this.inimigos.pop(this.inimigos[i]); 
-                this.Jogador.tiro.sprite.disableBody(true, true);
-                this.Jogador.tiro.sprite.destroy(true);
-                this.Jogador.tiro = null;
-            });
-        }
-        this.physics.add.collider(this.plataformas, this.Jogador.tiro.sprite, () => {
-            this.Jogador.tiro.sprite.disableBody(true, true);
-            this.Jogador.tiro.sprite.destroy(true);
-            this.Jogador.tiro = null;
-        });
-        this.physics.add.collider(this.Jogador.sprite, this.Jogador.tiro.sprite);
+        if(this.Jogador.podeAtirar == true){
+            this.Jogador.atirar(this.pointerX, this.pointerY);
+            for(let j = 0; j < this.Jogador.tiro.length; j++){
+                console.log(this.pointerX, this.pointerY);
+                
+                
+                for(let i = 0; i < this.inimigos.length; i ++){
+                    let aux;
+                    this.physics.add.collider(this.inimigos[i].sprite, this.Jogador.tiro[j].sprite, () => {
+                        this.Jogador.destroi(this.Jogador.tiro[j]);
+                        this.inimigos[i].atualizaVida(this.inimigos, this.inimigos[i]);
+                    });
+                }
+                this.physics.add.collider(this.plataformas, this.Jogador.tiro[j].sprite, () => {
+                    this.Jogador.destroi(this.Jogador.tiro[j]);
+                });
+                this.physics.add.collider(this.Jogador.sprite, this.Jogador.tiro[j].sprite);
+            }
+        }   
     }
 
     atualizaVida(){
