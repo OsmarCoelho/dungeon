@@ -9,6 +9,7 @@ export default class Jogador {
         this.h = 16; 
         this.velocidadedopao = 100;
         this.podeAtirar = true;
+        this.lado = 'D';
         this.tiro = [];
         this.sprite = cena.physics.add.sprite(64, 64, 'idle');
         this.sprite.body.setSize(16, 16);
@@ -40,7 +41,7 @@ export default class Jogador {
 
         cena.anims.create({
             key: 'baixo',
-            frames: cena.anims.generateFrameNumbers('move', { start: 0, end: 7 }),
+            frames: cena.anims.generateFrameNumbers('down', { start: 0, end: 7 }),
             frameRate: 7,
             repeat: -1
         });
@@ -61,25 +62,27 @@ export default class Jogador {
     }
 
     atirar(px, py){
-        let tiroAtual = new Pao(this.cena, this.sprite.getCenter().x, this.sprite.getCenter().y);
-        this.tiro.push(tiroAtual);
         this.podeAtirar = false;
-        if(px < this.x){
-            if(py < this.y){
-                tiroAtual.sprite.setVelocityX(-this.velocidadedopao);
-                tiroAtual.sprite.setVelocityY(-this.velocidadedopao);    
-            }else if(py > this.y){
-                tiroAtual.sprite.setVelocityX(-this.velocidadedopao);
-                tiroAtual.sprite.setVelocityY(+this.velocidadedopao);
-            }
-        }else if(px > this.x){
-            if(py < this.y){
-                tiroAtual.sprite.setVelocityX(+this.velocidadedopao);
-                tiroAtual.sprite.setVelocityY(-this.velocidadedopao);    
-            }else if(py > this.y){
-                tiroAtual.sprite.setVelocityX(+this.velocidadedopao);
-                tiroAtual.sprite.setVelocityY(+this.velocidadedopao);
-            }
+        if(this.lado == 'D'){
+            let tiroAtual = new Pao(this.cena, this.sprite.getCenter().x + 5, this.sprite.getCenter().y);
+            this.tiro.push(tiroAtual);
+            tiroAtual.sprite.setVelocityX(+this.velocidadedopao);
+            tiroAtual.sprite.setVelocityY(0);
+        }else if(this.lado == 'E'){
+            let tiroAtual = new Pao(this.cena, this.sprite.getCenter().x - 5, this.sprite.getCenter().y);
+            this.tiro.push(tiroAtual);
+            tiroAtual.sprite.setVelocityX(-this.velocidadedopao);
+            tiroAtual.sprite.setVelocityY(0);
+        }else if(this.lado == 'C'){
+            let tiroAtual = new Pao(this.cena, this.sprite.getCenter().x, this.sprite.getCenter().y - 5);
+            this.tiro.push(tiroAtual);
+            tiroAtual.sprite.setVelocityX(0);
+            tiroAtual.sprite.setVelocityY(-this.velocidadedopao);
+        }else if(this.lado == 'B'){
+            let tiroAtual = new Pao(this.cena, this.sprite.getCenter().x, this.sprite.getCenter().y + 5);
+            this.tiro.push(tiroAtual);
+            tiroAtual.sprite.setVelocityX(0);
+            tiroAtual.sprite.setVelocityY(+this.velocidadedopao);
         }
         setTimeout(() => {
             this.podeAtirar = true;

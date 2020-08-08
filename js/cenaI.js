@@ -31,9 +31,9 @@ export default class cenaI extends Phaser.Scene {
 
         this.barraDeVida = this.add.graphics();
         this.barraDeVida.fillStyle(0xff0000, 1);
-        this.barraDeVida.fillRect(212, 350, jogador.vida, 10);
+        this.barraDeVida.fillRect(356, 450, jogador.vida, 10);
         this.barraDeVida.lineStyle(4, 0xffffff, 1);
-        this.barraDeVida.strokeRect(212, 350, 100, 10);
+        this.barraDeVida.strokeRect(356, 450, 100, 10);
         this.barraDeVida.setScrollFactor(0);
         //fim Jogador
 
@@ -103,7 +103,7 @@ export default class cenaI extends Phaser.Scene {
         }); 
         this.cameras.main.setBounds(0, 0, 950, 480);
         this.cameras.main.startFollow(jogador, false, 1, 1);
-        this.cameras.main.setZoom(1.5);
+        this.cameras.main.setZoom(2);
         //fim configurações
         
     }
@@ -148,18 +148,22 @@ export default class cenaI extends Phaser.Scene {
             jogador.setVelocityX(-100);
             jogador.setFlip(true, false)
             jogador.anims.play('esquerda', true);
+            this.Jogador.lado = 'E';
         }else if (this.teclas.right.isDown) {
             jogador.setVelocityX(100);
             jogador.setFlip(false, false)
             jogador.anims.play('direita', true);
+            this.Jogador.lado = 'D';
         } else if(this.teclas.up.isDown){
             jogador.setVelocityY(-100);
             jogador.setFlip(false, false)
             jogador.anims.play('cima', true);
+            this.Jogador.lado = 'C';
         }else if(this.teclas.down.isDown){
             jogador.setVelocityY(100);
             jogador.setFlip(false, false)
             jogador.anims.play('baixo', true);
+            this.Jogador.lado = 'B';
         }else {
             jogador.setVelocityX(0);
             jogador.setVelocityY(0);
@@ -207,16 +211,16 @@ export default class cenaI extends Phaser.Scene {
         if(this.Jogador.vida <= 0){
             this.barraDeVida.clear()
             this.barraDeVida.fillStyle(0xff0000, 1);
-            this.barraDeVida.fillRect(212, 350, 0, 10);
+            this.barraDeVida.fillRect(356, 450, 0, 10);
             this.barraDeVida.lineStyle(4, 0xffffff, 1);
-            this.barraDeVida.strokeRect(212, 350, 100, 10);
+            this.barraDeVida.strokeRect(356, 450, 100, 10);
             location.reload();
         }else{
             this.barraDeVida.clear()
             this.barraDeVida.fillStyle(0xff0000, 1);
-            this.barraDeVida.fillRect(212, 350, this.Jogador.vida, 10);
+            this.barraDeVida.fillRect(356, 450, this.Jogador.vida, 10);
             this.barraDeVida.lineStyle(4, 0xffffff, 1);
-            this.barraDeVida.strokeRect(212, 350, 100, 10);
+            this.barraDeVida.strokeRect(356, 450, 100, 10);
         }
     }
 

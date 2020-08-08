@@ -1,11 +1,12 @@
 import menu from './menu.js';
 import carrega from './carrega.js';
 import cenaI from './cenaI.js';
+import cenaII from './cenaII.js';
 
 const config = {
     type: Phaser.AUTO,
-    width: 1080,
-    height: 480,
+    width: window.innerWidth,
+    height: window.innerHeight,
     parent: 'cena',
     physics: {
         default: 'arcade',
@@ -19,7 +20,8 @@ const config = {
     scene: [
         menu,
         carrega,
-        cenaI
+        cenaI,
+        cenaII
     ]
 };
 
