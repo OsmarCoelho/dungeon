@@ -28,6 +28,9 @@ export default class cenaI extends Phaser.Scene {
         let jogador = new Jogador(this);
         this.Jogador = jogador;
         this.physics.add.collider(jogador.sprite, this.plataformas);
+        this.physics.add.collider(jogador.sprite, this.portal, () => {
+            this.scene.start('cenaII');
+        });
 
         this.barraDeVida = this.add.graphics();
         this.barraDeVida.fillStyle(0xff0000, 1);
@@ -40,27 +43,27 @@ export default class cenaI extends Phaser.Scene {
         //inimigos
         let inimigos = [];
 
-        inimigos.push(new Inimigo(this, 800, 400));
-        inimigos.push(new Inimigo(this, 750, 300));
+        inimigos.push(new Inimigo(this, 800, 400, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 750, 300, 'slimeVerde', 14, 15, 10, 100));
 
-        inimigos.push(new Inimigo(this, 890, 165));
-        inimigos.push(new Inimigo(this, 800, 100));
-        inimigos.push(new Inimigo(this, 700, 300));
+        inimigos.push(new Inimigo(this, 890, 165, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 800, 100, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 700, 300, 'slimeVerde', 14, 15, 10, 100));
 
-        inimigos.push(new Inimigo(this, 450, 90));
-        inimigos.push(new Inimigo(this, 350, 150));
-        inimigos.push(new Inimigo(this, 200, 50));
+        inimigos.push(new Inimigo(this, 450, 90, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 350, 150, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 200, 50, 'slimeVerde', 14, 15, 10, 100));
 
-        inimigos.push(new Inimigo(this, 658, 389));
-        inimigos.push(new Inimigo(this, 800, 250));
+        inimigos.push(new Inimigo(this, 658, 389, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 800, 200, 'slimeVerde', 14, 15, 10, 100));
 
-        inimigos.push(new Inimigo(this, 850, 115));
-        inimigos.push(new Inimigo(this, 750, 150));
-        inimigos.push(new Inimigo(this, 600, 350));
+        inimigos.push(new Inimigo(this, 850, 115, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 750, 150, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 700, 400, 'slimeVerde', 14, 15, 10, 100));
 
-        inimigos.push(new Inimigo(this, 500, 90));
-        inimigos.push(new Inimigo(this, 300, 120));
-        inimigos.push(new Inimigo(this, 150, 100));
+        inimigos.push(new Inimigo(this, 500, 90, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 300, 120, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 150, 100, 'slimeVerde', 14, 15, 10, 100));
 
 
         for(let i = 0; i < inimigos.length; i ++){
@@ -232,6 +235,7 @@ export default class cenaI extends Phaser.Scene {
         let tamX = 10;
         let tamY = 5;
         this.plataformas = this.physics.add.staticGroup();
+        this.portal = this.physics.add.staticGroup();
 
         
         this.plataformas.create(32, 20, 'bse').setOrigin(0, 0).refreshBody().setSize(32, 11, false);
@@ -312,7 +316,12 @@ export default class cenaI extends Phaser.Scene {
                         this.plataformas.create((aux+256) + (32*2)+160, (116+(32*(5+c))), 'bid').setOrigin(0, 0).refreshBody().setSize(32, 11, false).setOffset(0, 21);
                         this.plataformas.create((aux+256) + (32*2)+160, (116+(32*(5+c))), 'bid').setOrigin(0, 0).refreshBody().setSize(8, 32, false).setOffset(24, 0);
                         for(c = 1; c < 7; c++){
-                            this.plataformas.create((aux+256) + (32*c), (116+(320)), 'mi').setOrigin(0, 0).refreshBody().setSize(32, 11, false).setOffset(0, 21);
+                            if(c == 5){
+                                this.plataformas.create((aux+256) + (32*c), (116+(320)), 'mip').setOrigin(0, 0).refreshBody().setSize(32, 11, false).setOffset(0, 21);
+                                this.portal.create((aux+256) + (32*c), (116+(320)), 'mip').setOrigin(0, 0).refreshBody().setSize(16, 2, false).setOffset(8, 18);
+                            }else{
+                                this.plataformas.create((aux+256) + (32*c), (116+(320)), 'mi').setOrigin(0, 0).refreshBody().setSize(32, 11, false).setOffset(0, 21);
+                            }
                         }
                         this.plataformas.create((aux+256), (116+(320)), 'bie').setOrigin(0, 0).refreshBody().setSize(8, 32, false);    
                         this.plataformas.create((aux+256), (116+(320)), 'bie').setOrigin(0, 0).refreshBody().setSize(32, 11, false).setOffset(0, 21);

@@ -36,6 +36,9 @@ export default class carrega extends Phaser.Scene {
         this.load.image('pm', 'imgs/tiles/pm.png');
         this.load.image('pmd', 'imgs/tiles/pmd.png');
 
+            //tiles base porta
+            this.load.image('mip', 'imgs/tiles/mip.png');
+
         //tiles do corredor
         //horizontal
         this.load.image('ch0', 'imgs/tiles/corredor/horizontal/00.png');
@@ -59,7 +62,8 @@ export default class carrega extends Phaser.Scene {
 
         this.load.image('pao', 'imgs/pão.png');
 
-        this.load.spritesheet('slimeInimigo', 'imgs/slime-spritesheet.png', { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet('slimeVerde', 'imgs/slime-spritesheet.png', { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet('slimeVermelha', 'imgs/slime-vermelha.png', { frameWidth: 24, frameHeight: 24 });
         
 
     }

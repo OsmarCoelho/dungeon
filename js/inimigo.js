@@ -1,12 +1,14 @@
 export default class Inimigo {
-    constructor(cena, x, y) {
+    constructor(cena, x, y, img, h, velocidade, vida, range) {
         this.x = x;
         this.y = y;
-        this.h = 14;
-        this.vida = 10;
-        this.velocidade = 15;
+        this.h = h;
+        this.vida = vida;
+        this.velocidade = velocidade;
         this.cena = cena;
-        this.sprite = cena.physics.add.sprite(this.x, this.y, 'slimeInimigo');
+        this.img = img;
+        this.range = range;
+        this.sprite = cena.physics.add.sprite(this.x, this.y, this.img);
         this.sprite.body.setSize(14, 14).setOffset(10, 19);
         this.sprite.setBounce(0.2)
         this.sprite.setCollideWorldBounds(true);
@@ -14,14 +16,14 @@ export default class Inimigo {
         // cria as animações
         cena.anims.create({
             key: 'movendo',
-            frames: cena.anims.generateFrameNumbers('slimeInimigo', { start: 20, end: 29 }),
+            frames: cena.anims.generateFrameNumbers(this.img, { start: 20, end: 29 }),
             frameRate: 10,
             repeat: -1
         });
 
         cena.anims.create({
             key: 'parado',
-            frames: cena.anims.generateFrameNumbers('slimeInimigo', { start: 0, end: 9 }),
+            frames: cena.anims.generateFrameNumbers(this.img, { start: 0, end: 9 }),
             frameRate: 10,
             repeat: -1
         });
@@ -32,10 +34,10 @@ export default class Inimigo {
         let b = Math.abs(this.sprite.getCenter().y - v.y);
         let d = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 
-        if(d <= 75 && d > 15 && this.vida != 0){
+        if(d <= this.range && d >= (this.h/2 + 8) && this.vida != 0){
             this.sprite.anims.play('movendo', true);
             this.anda(v);
-        } else if(d > 75 && this.vida != 0){
+        } else if(d > this.range && this.vida != 0){
             this.sprite.anims.play('parado', true);
             this.sprite.setVelocityY(0);    
             this.sprite.setVelocityX(0);    
