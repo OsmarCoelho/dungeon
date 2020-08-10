@@ -22,7 +22,7 @@ export default class carrega extends Phaser.Scene {
         });
 
         this.load.on('complete', () => {
-            this.scene.start('cenaI');
+            this.scene.start('cutI');
         });
 
         //tiles base do chão
