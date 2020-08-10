@@ -4,6 +4,10 @@ import cenaI from './cenaI.js';
 import cenaII from './cenaII.js';
 import cenaIII from './cenaIII.js';
 
+import cutI from './cutI.js';
+import cutII from './cutII.js';
+import cutIII from './cutIII.js';
+
 const config = {
     type: Phaser.AUTO,
     width: window.innerWidth,
@@ -23,7 +27,10 @@ const config = {
         carrega,
         cenaI,
         cenaII,
-        cenaIII
+        cenaIII,
+        cutI,
+        cutII,
+        cutIII
     ]
 };
 

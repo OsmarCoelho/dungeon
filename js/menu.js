@@ -7,7 +7,7 @@ export default class menu extends Phaser.Scene {
 
     preload() {
         this.load.image('cursorP', 'imgs/cursor.png');
-        this.load.image('nome', 'imgs/nome.png');
+        this.load.image('nome', 'imgs/titulo.png');
         this.load.image('tijolo', 'imgs/tijolo.png');
         this.w = window.innerWidth;
         this.h = window.innerHeight;
@@ -27,7 +27,7 @@ export default class menu extends Phaser.Scene {
             this.scene.start('carrega');
         }, this);
 
-        let nome = this.add.image(this.w/2 - 270, this.h/4, 'nome').setOrigin(0,0);
+        let nome = this.add.image(this.w/2 - 320, this.h/4, 'nome').setOrigin(0,0);
     }
 
     

@@ -35,9 +35,11 @@ export default class carrega extends Phaser.Scene {
         this.load.image('ms', 'imgs/tiles/ms.png');
         this.load.image('pm', 'imgs/tiles/pm.png');
         this.load.image('pmd', 'imgs/tiles/pmd.png');
+        this.load.image('pmdp', 'imgs/tiles/pmdp.png');
 
             //tiles base porta
             this.load.image('mip', 'imgs/tiles/mip.png');
+            this.load.image('pedp', 'imgs/tiles/pedp.png');
 
         //tiles do corredor
         //horizontal
@@ -52,20 +54,14 @@ export default class carrega extends Phaser.Scene {
 
         //assets
         this.load.spritesheet('tochas', 'imgs/tochas.png', { frameWidth: 16, frameHeight: 16 });
+        this.load.image('tiro', 'imgs/tiro.png');
+        this.load.image('tiroV', 'imgs/tiroV.png');
+        this.load.image('canhao', 'imgs/canhao.png');
 
         //personagens
-        this.load.spritesheet('idle', 'imgs/idleToast.png', { frameWidth: 16, frameHeight: 16 });
-        this.load.spritesheet('move', 'imgs/movingToast.png', {frameWidth: 16, frameHeight: 16 });
-        this.load.spritesheet('down', 'imgs/downToast.png', {frameWidth: 16, frameHeight: 16 });
-        this.load.spritesheet('up', 'imgs/upToast.png', {frameWidth: 16, frameHeight: 16 });
-        this.load.spritesheet('shoot', 'imgs/shootToast.png', {frameWidth: 16, frameHeight: 16 });
-
-        this.load.image('pao', 'imgs/pão.png');
-
-        this.load.spritesheet('slimeVerde', 'imgs/slime-spritesheet.png', { frameWidth: 32, frameHeight: 32 });
-        this.load.spritesheet('slimeVermelha', 'imgs/slime-vermelha.png', { frameWidth: 24, frameHeight: 24 });
-        
-
+        this.load.spritesheet('dem', 'imgs/dem.png', {frameWidth: 16, frameHeight: 16 });
+        this.load.spritesheet('cav', 'imgs/cav.png', {frameWidth: 16, frameHeight: 28 });
+        this.load.spritesheet('bigdem', 'imgs/bigdem.png', {frameWidth: 32, frameHeight: 36 });
     }
 
     create() {

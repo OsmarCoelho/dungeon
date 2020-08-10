@@ -1,4 +1,6 @@
-export default class Inimigo {
+import Canhao from "./Canhao.js";
+
+export default class Boss {
     constructor(cena, x, y, img, velocidade, vida, range) {
         this.x = x;
         this.y = y;
@@ -11,21 +13,20 @@ export default class Inimigo {
         this.range = range;
         this.corpo = true;
         this.sprite = cena.physics.add.sprite(this.x, this.y, this.img);
-        this.sprite.setScale(0.8);
         this.sprite.body.setSize(this.w, this.h);
         this.sprite.setBounce(5);
         this.sprite.setCollideWorldBounds(true);
 
         // cria as animações
         cena.anims.create({
-            key: 'movendo',
+            key: 'move',
             frames: cena.anims.generateFrameNumbers(this.img, { start: 4, end: 8 }),
             frameRate: 10,
             repeat: -1
         });
 
         cena.anims.create({
-            key: 'parado',
+            key: 'para',
             frames: cena.anims.generateFrameNumbers(this.img, { start: 0, end: 4 }),
             frameRate: 4,
             repeat: -1
@@ -37,11 +38,15 @@ export default class Inimigo {
         let b = Math.abs(this.sprite.getCenter().y - v.y);
         let d = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 
+        if(this.vida <= 0){
+            this.cena.scene.start('cutIII');
+        }
+
         if(d <= this.range && d >= (this.h/2 + 5) && this.vida != 0){
-            this.sprite.anims.play('movendo', true);
+            this.sprite.anims.play('move', true);
             this.anda(v);
         } else if(d > this.range && this.vida != 0){
-            this.sprite.anims.play('parado', true);
+            this.sprite.anims.play('para', true);
             this.sprite.setVelocityY(0);    
             this.sprite.setVelocityX(0);    
         }
@@ -57,26 +62,28 @@ export default class Inimigo {
             inimigo.sprite.setPosition(0, 0);
             inimigo.sprite.disableBody(true, true);
             inimigo.sprite.destroy(true);
+        }else if(this.vida <= 100){
+            this.velocidade = 80;
         }
     }
 
     anda(v){
-        if(v.x < this.sprite.getCenter().x){
-            if(v.y > this.sprite.getCenter().y){
-                this.sprite.setVelocityX(-this.velocidade);
-                this.sprite.setVelocityY(+this.velocidade);
-            }else if(v.y < this.sprite.getCenter().y){
-                this.sprite.setVelocityX(-this.velocidade);
-                this.sprite.setVelocityY(-this.velocidade);
+            if(v.x < this.sprite.getCenter().x){
+                if(v.y > this.sprite.getCenter().y){
+                    this.sprite.setVelocityX(-this.velocidade);
+                    this.sprite.setVelocityY(+this.velocidade);
+                }else if(v.y < this.sprite.getCenter().y){
+                    this.sprite.setVelocityX(-this.velocidade);
+                    this.sprite.setVelocityY(-this.velocidade);
+                }
+            }else if(v.x > this.sprite.getCenter().x){
+                if(v.y > this.sprite.getCenter().y){
+                    this.sprite.setVelocityX(+this.velocidade);
+                    this.sprite.setVelocityY(+this.velocidade);
+                }else if(v.y < this.sprite.getCenter().y){
+                    this.sprite.setVelocityX(+this.velocidade);
+                    this.sprite.setVelocityY(-this.velocidade);
+                }
             }
-        }else if(v.x > this.sprite.getCenter().x){
-            if(v.y > this.sprite.getCenter().y){
-                this.sprite.setVelocityX(+this.velocidade);
-                this.sprite.setVelocityY(+this.velocidade);
-            }else if(v.y < this.sprite.getCenter().y){
-                this.sprite.setVelocityX(+this.velocidade);
-                this.sprite.setVelocityY(-this.velocidade);
-            }
-        }
     }
 }

@@ -1,7 +1,7 @@
 import Jogador from "./jogador.js";
 import Inimigo from "./inimigo.js";
 import Tocha from "./tocha.js";
-import Pao from "./pao.js";
+import Tiro from "./Tiro.js";
 
 
 export default class cenaI extends Phaser.Scene {
@@ -25,11 +25,11 @@ export default class cenaI extends Phaser.Scene {
         //fim cenario
 
         //Jogador
-        let jogador = new Jogador(this);
+        let jogador = new Jogador(this, 50, 130);
         this.Jogador = jogador;
         this.physics.add.collider(jogador.sprite, this.plataformas);
         this.physics.add.collider(jogador.sprite, this.portal, () => {
-            this.scene.start('cenaII');
+            this.scene.start('cenaIII');
         });
 
         this.barraDeVida = this.add.graphics();
@@ -42,28 +42,31 @@ export default class cenaI extends Phaser.Scene {
 
         //inimigos
         let inimigos = [];
+        let velocidade = 35;
+        let inivida = 20;
+        let alcance = 150;
 
-        inimigos.push(new Inimigo(this, 800, 400, 'slimeVerde', 14, 15, 10, 100));
-        inimigos.push(new Inimigo(this, 750, 300, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 800, 400, 'cav', velocidade, inivida, alcance));
+        inimigos.push(new Inimigo(this, 750, 300, 'cav', velocidade, inivida, alcance));
 
-        inimigos.push(new Inimigo(this, 890, 165, 'slimeVerde', 14, 15, 10, 100));
-        inimigos.push(new Inimigo(this, 800, 100, 'slimeVerde', 14, 15, 10, 100));
-        inimigos.push(new Inimigo(this, 700, 300, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 890, 165, 'cav', velocidade, inivida, alcance));
+        inimigos.push(new Inimigo(this, 800, 100, 'cav', velocidade, inivida, alcance));
+        inimigos.push(new Inimigo(this, 700, 300, 'cav', velocidade, inivida, alcance));
 
-        inimigos.push(new Inimigo(this, 450, 90, 'slimeVerde', 14, 15, 10, 100));
-        inimigos.push(new Inimigo(this, 350, 150, 'slimeVerde', 14, 15, 10, 100));
-        inimigos.push(new Inimigo(this, 200, 50, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 450, 100, 'cav', velocidade, inivida, alcance));
+        inimigos.push(new Inimigo(this, 350, 150, 'cav', velocidade, inivida, alcance));
+        inimigos.push(new Inimigo(this, 200, 50, 'cav', velocidade, inivida, alcance));
 
-        inimigos.push(new Inimigo(this, 658, 389, 'slimeVerde', 14, 15, 10, 100));
-        inimigos.push(new Inimigo(this, 800, 200, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 658, 389, 'cav', velocidade, inivida, alcance));
+        inimigos.push(new Inimigo(this, 800, 200, 'cav', velocidade, inivida, alcance));
 
-        inimigos.push(new Inimigo(this, 850, 115, 'slimeVerde', 14, 15, 10, 100));
-        inimigos.push(new Inimigo(this, 750, 150, 'slimeVerde', 14, 15, 10, 100));
-        inimigos.push(new Inimigo(this, 700, 400, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 850, 115, 'cav', velocidade, inivida, alcance));
+        inimigos.push(new Inimigo(this, 750, 150, 'cav', velocidade, inivida, alcance));
+        inimigos.push(new Inimigo(this, 700, 400, 'cav', velocidade, inivida, alcance));
 
-        inimigos.push(new Inimigo(this, 500, 90, 'slimeVerde', 14, 15, 10, 100));
-        inimigos.push(new Inimigo(this, 300, 120, 'slimeVerde', 14, 15, 10, 100));
-        inimigos.push(new Inimigo(this, 150, 100, 'slimeVerde', 14, 15, 10, 100));
+        inimigos.push(new Inimigo(this, 500, 100, 'cav', velocidade, inivida, alcance));
+        inimigos.push(new Inimigo(this, 300, 120, 'cav', velocidade, inivida, alcance));
+        inimigos.push(new Inimigo(this, 150, 100, 'cav', velocidade, inivida, alcance));
 
 
         for(let i = 0; i < inimigos.length; i ++){
@@ -124,21 +127,21 @@ export default class cenaI extends Phaser.Scene {
 
         //Controle de camera
         if(this.teclas.left.isDown && this.Jogador.x > 0){
-            this.Jogador.x -= 2;
+            this.Jogador.x -= 1.5;
         }else if(this.teclas.right.isDown && this.Jogador.x < 950){
-            this.Jogador.x += 2;
+            this.Jogador.x += 1.5;
         }if(this.teclas.up.isDown && this.Jogador.y > 0){
-            this.Jogador.y -= 2;
+            this.Jogador.y -= 1.5;
         }else if (this.teclas.down.isDown && this.Jogador.y < 480){
-            this.Jogador.y += 2;
+            this.Jogador.y += 1.5;
         }
         //fim controle de camera
         
         //Movimentação e colisão do inimigo
         for(let i = 0; i < inimigos.length; i++){
             inimigos[i].ver(jogador.getCenter());
-            if(inimigos[i].ver(jogador.getCenter()) <= 15){
-                this.inimigos[i].atualizaVida(this.inimigos, this.inimigos[i]);    
+            if(inimigos[i].ver(jogador.getCenter()) <= (inimigos[i].h/2 + 5)){
+                this.inimigos[i].atualizaVida(this.inimigos, this.inimigos[i], 10);    
                 this.atualizaVida();
             }     
         }
@@ -198,7 +201,7 @@ export default class cenaI extends Phaser.Scene {
                     let aux;
                     this.physics.add.collider(this.inimigos[i].sprite, this.Jogador.tiro[j].sprite, () => {
                         this.Jogador.destroi(this.Jogador.tiro[j]);
-                        this.inimigos[i].atualizaVida(this.inimigos, this.inimigos[i]);
+                        this.inimigos[i].atualizaVida(this.inimigos, this.inimigos[i], 10);
                     });
                 }
                 this.physics.add.collider(this.plataformas, this.Jogador.tiro[j].sprite, () => {
@@ -217,7 +220,7 @@ export default class cenaI extends Phaser.Scene {
             this.barraDeVida.fillRect(356, 450, 0, 10);
             this.barraDeVida.lineStyle(4, 0xffffff, 1);
             this.barraDeVida.strokeRect(356, 450, 100, 10);
-            location.reload();
+            this.scene.start('cutII');
         }else{
             this.barraDeVida.clear()
             this.barraDeVida.fillStyle(0xff0000, 1);
@@ -253,7 +256,11 @@ export default class cenaI extends Phaser.Scene {
         
         //for para a parede da esquerda
         for(i = 0; i < tamY; i++){
-            this.plataformas.create(32, (52+(32*i)), 'pm').setOrigin(0, 0).refreshBody().setSize(8, 32, false);
+            if(i == 2){
+                this.plataformas.create(32, (52+(32*i)), 'pedp').setOrigin(0, 0).refreshBody().setSize(8, 32, false).setOffset(0, 0);
+            }else{
+                this.plataformas.create(32, (52+(32*i)), 'pm').setOrigin(0, 0).refreshBody().setSize(8, 32, false);
+            }
         }
 
         auy = (52+(32*i));

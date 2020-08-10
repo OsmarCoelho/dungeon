@@ -1,7 +1,7 @@
 import Jogador from "./jogador.js";
-import Inimigo from "./inimigo.js";
+import Boss from "./boss.js";
 import Tocha from "./tocha.js";
-import Pao from "./pao.js";
+import Tiro from "./Tiro.js";
 
 
 export default class cenaIII extends Phaser.Scene {
@@ -25,7 +25,7 @@ export default class cenaIII extends Phaser.Scene {
         //fim cenario
 
         //Jogador
-        let jogador = new Jogador(this);
+        let jogador = new Jogador(this, 50, 130);
         this.Jogador = jogador;
         this.physics.add.collider(jogador.sprite, this.plataformas);
 
@@ -37,8 +37,10 @@ export default class cenaIII extends Phaser.Scene {
         this.barraDeVida.setScrollFactor(0);
         //fim Jogador
 
-        //inimigos
+        //boss
         let inimigos = [];
+
+        inimigos.push(new Boss(this, 550, 200, 'bigdem', 60, 350, 480));
 
 
         for(let i = 0; i < inimigos.length; i ++){
@@ -50,8 +52,16 @@ export default class cenaIII extends Phaser.Scene {
                 this.physics.add.collider(inimigos[i].sprite, inimigos[g].sprite);
             }
         }
+
+        this.vidaBoss = this.add.graphics();
+        this.vidaBoss.fillStyle(0xff0000, 1);
+        this.vidaBoss.fillRect(440, 530, inimigos[0].vida, 10);
+        this.vidaBoss.lineStyle(4, 0xffffff, 1);
+        this.vidaBoss.strokeRect(440, 530, inimigos[0].vida, 10);
+        this.vidaBoss.setScrollFactor(0);
+
         this.inimigos = inimigos;
-        //fim inimigos
+        //fim boss
     
 
         //Tochas
@@ -63,7 +73,6 @@ export default class cenaIII extends Phaser.Scene {
 
         this.tochas = tochas;
         // Fim tochas
-
 
         //Configurações adicionais
         this.teclas = this.input.keyboard.addKeys({
@@ -81,7 +90,7 @@ export default class cenaIII extends Phaser.Scene {
     }
     update() {
         const jogador = this.Jogador.sprite;
-        const inimigos = this.inimigos;
+        const boss = this.boss;
         const tochas = this.tochas;
 
         //Assets
@@ -92,14 +101,21 @@ export default class cenaIII extends Phaser.Scene {
         //fim Assets
         
         //Movimentação e colisão do inimigo
-        for(let i = 0; i < inimigos.length; i++){
-            inimigos[i].ver(jogador.getCenter());
-            if(inimigos[i].ver(jogador.getCenter()) <= 15){
-                this.inimigos[i].atualizaVida(this.inimigos, this.inimigos[i]);    
-                this.atualizaVida();
+        
+      
+            this.inimigos[0].ver(jogador.getCenter());
+            if(this.inimigos[0].ver(jogador.getCenter()) <= (this.inimigos[0].h/2 + 5)){
+                if(this.inimigos[0].corpo == true){
+                    this.inimigos[0].corpo = false;
+                    this.atualizaVidaBoss(1);    
+                    this.atualizaVida();
+                    setTimeout(this.inimigos[0].corpo = true, 3000);
+                }
             }     
-        }
+        
         //fim movimentação e colisão
+        
+        
 
         
         
@@ -108,18 +124,22 @@ export default class cenaIII extends Phaser.Scene {
             jogador.setVelocityX(-100);
             jogador.setFlip(true, false)
             jogador.anims.play('esquerda', true);
+            this.Jogador.lado = 'E';
         }else if (this.teclas.right.isDown) {
             jogador.setVelocityX(100);
             jogador.setFlip(false, false)
             jogador.anims.play('direita', true);
+            this.Jogador.lado = 'D';
         } else if(this.teclas.up.isDown){
             jogador.setVelocityY(-100);
             jogador.setFlip(false, false)
             jogador.anims.play('cima', true);
+            this.Jogador.lado = 'C';
         }else if(this.teclas.down.isDown){
             jogador.setVelocityY(100);
             jogador.setFlip(false, false)
             jogador.anims.play('baixo', true);
+            this.Jogador.lado = 'B';
         }else {
             jogador.setVelocityX(0);
             jogador.setVelocityY(0);
@@ -140,6 +160,7 @@ export default class cenaIII extends Phaser.Scene {
         
     }
 
+
     atualizaTiro(){
         if(this.Jogador.podeAtirar == true){
             this.Jogador.atirar(this.pointerX, this.pointerY);
@@ -151,7 +172,7 @@ export default class cenaIII extends Phaser.Scene {
                     let aux;
                     this.physics.add.collider(this.inimigos[i].sprite, this.Jogador.tiro[j].sprite, () => {
                         this.Jogador.destroi(this.Jogador.tiro[j]);
-                        this.inimigos[i].atualizaVida(this.inimigos, this.inimigos[i]);
+                        this.atualizaVidaBoss(10);
                     });
                 }
                 this.physics.add.collider(this.plataformas, this.Jogador.tiro[j].sprite, () => {
@@ -159,18 +180,34 @@ export default class cenaIII extends Phaser.Scene {
                 });
                 this.physics.add.collider(this.Jogador.sprite, this.Jogador.tiro[j].sprite);
             }
-        }   
+        }     
     }
 
+    atualizaVidaBoss(dano){
+        this.inimigos[0].atualizaVida(this.inimigos, this.inimigos[0], dano);
+        if(this.vida <= 0){
+            this.vidaBoss.clear()
+            this.vidaBoss.fillStyle(0xff0000, 1);
+            this.vidaBoss.fillRect(440, 530, 0, 10);
+            this.vidaBoss.lineStyle(4, 0xffffff, 1);
+            this.vidaBoss.strokeRect(440, 530, 350, 10);
+        }else{
+            this.vidaBoss.clear()
+            this.vidaBoss.fillStyle(0xff0000, 1);
+            this.vidaBoss.fillRect(440, 530, this.inimigos[0].vida, 10);
+            this.vidaBoss.lineStyle(4, 0xffffff, 1);
+            this.vidaBoss.strokeRect(440, 530, 350, 10);
+        }
+    }
     atualizaVida(){
-        this.Jogador.vida = this.Jogador.vida - 15;
+        this.Jogador.vida = this.Jogador.vida - 2;
         if(this.Jogador.vida <= 0){
-            this.barraDeVida.clear()
+            this.barraDeVida.clear();
             this.barraDeVida.fillStyle(0xff0000, 1);
             this.barraDeVida.fillRect(247, 530, 0, 10);
             this.barraDeVida.lineStyle(4, 0xffffff, 1);
             this.barraDeVida.strokeRect(247, 530, 100, 10);
-            location.reload();
+            this.scene.start('cutII');
         }else{
             this.barraDeVida.clear()
             this.barraDeVida.fillStyle(0xff0000, 1);
@@ -204,7 +241,11 @@ export default class cenaIII extends Phaser.Scene {
         
         //for para a parede da esquerda
         for(i = 0; i < tamY; i++){
-            this.plataformas.create(32, (52+(32*i)), 'pm').setOrigin(0, 0).refreshBody().setSize(8, 32, false);
+            if(i == 2){
+                this.plataformas.create(32, (52+(32*i)), 'pedp').setOrigin(0, 0).refreshBody().setSize(8, 32, false).setOffset(0, 0);
+            }else{
+                this.plataformas.create(32, (52+(32*i)), 'pm').setOrigin(0, 0).refreshBody().setSize(8, 32, false);
+            }
         }
 
         auy = (52+(32*i));
